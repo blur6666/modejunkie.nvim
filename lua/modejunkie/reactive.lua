@@ -10,6 +10,13 @@ function M.setup()
     name = "cursorline",
     init = function()
       vim.opt.cursorline = true
+      -- LazyVim (and some UI configs) often set `cursorlineopt=number`, which
+      -- makes the horizontal CursorLine highlight invisible. modejunkie wants
+      -- the full mode tint across the whole line, so force line+number.
+      local clo = vim.o.cursorlineopt
+      if type(clo) == "string" and not clo:match("line") then
+        vim.o.cursorlineopt = "both"
+      end
     end,
     modes = {
       n = {

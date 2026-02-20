@@ -15,6 +15,16 @@ modejunkie colors **four UI elements simultaneously** based on your current vim 
 
 All four update instantly on every mode change, including operator-pending sub-modes (`d`, `y`, `c`).
 
+## Defaults (so you actually see it)
+
+modejunkie enables the minimum editor options needed for the visuals to be visible in normal buffers:
+
+- `number` on (otherwise line-number colors have nothing to color)
+- `cursorline` on (otherwise the horizontal tint doesn't render)
+- fixes `cursorlineopt` if it's set to `number` (switches to `both` so the full line tint shows)
+
+You can disable this behavior with `defaults = false` (see Configuration).
+
 ## Supported modes
 
 | Mode | Label | Color |
@@ -74,6 +84,14 @@ Pass options to `setup()` to configure the floating indicator:
 
 ```lua
 require("modejunkie").setup({
+  -- Optional: enforce sane defaults so indicators are actually visible.
+  -- Set `defaults = false` if you don't want modejunkie touching options.
+  defaults = {
+    number = true,          -- required for line-number coloring to be visible
+    relativenumber = nil,   -- keep nil to not force it either way
+    cursorline = true,      -- required for cursorline tint to be visible
+    cursorlineopt = "both", -- fixes configs like `cursorlineopt=number`
+  },
   cursor_status = {
     disabled_filetypes = {
       "alpha", "dashboard", "lazy", "mason", "TelescopePrompt",
@@ -87,7 +105,21 @@ require("modejunkie").setup({
 })
 ```
 
+To disable all option-tweaking (modejunkie will still apply highlights and the floating indicator):
+
+```lua
+require("modejunkie").setup({ defaults = false })
+```
+
 All options are optional. The defaults above are used when nothing is passed.
+
+If you don't see the horizontal tint or line-number colors, check these options:
+
+```vim
+:set cursorline?
+:set cursorlineopt?
+:set number?
+```
 
 ## Colors
 
@@ -102,6 +134,12 @@ All mode colors are defined in [`lua/modejunkie/colors.lua`](lua/modejunkie/colo
 }
 ```
 
+## Dev / Docker
+
+This repo includes a throwaway Docker test harness at `test-env/` that boots a fresh LazyVim and loads modejunkie from the local directory.
+
+If you're hacking on the plugin, it's a convenient way to verify "fresh install" behavior without touching your real config.
+
 ## Why?
 
-Vim modes are invisible by default. A single character in the statusline, 50 lines away from where you're looking. modejunkie makes the current mode impossible to ignore — your cursorline, your line numbers, your cursor, all shift color the instant you change modes. It's mode awareness for people who don't want to think about it.
+Vim modes are invisible by default. A single character in the statusline, 50 lines away from where you're looking. modejunkie makes the current mode impossible to ignore: your cursorline, your line numbers, your floating indicator, and your statusline all shift color the instant you change modes. It's mode awareness for people who don't want to think about it.

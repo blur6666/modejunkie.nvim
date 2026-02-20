@@ -6,6 +6,11 @@ function M.setup(opts)
   -- 1. Apply transparency + noice + search highlights
   require("modejunkie.highlights").apply()
 
+  -- 1.5 Make sure the UI indicators are actually visible.
+  -- This enables `number`/`cursorline` in normal buffers and fixes
+  -- `cursorlineopt` if it's set to only highlight the number.
+  require("modejunkie.options").setup(opts.defaults)
+
   -- 2. Setup floating mode widget
   require("modejunkie.cursor_status").setup(opts.cursor_status)
 
