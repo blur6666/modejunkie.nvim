@@ -4,7 +4,9 @@ For when your statusline is too far away and you still can't tell what mode you'
 
 modejunkie colors **four UI elements simultaneously** based on your current vim mode — cursorline, line numbers, a floating widget near your cursor, and your statusline. No more accidentally typing `iiiiii` into your buffer because you forgot you were in normal mode.
 
-<!-- TODO: add screenshot/demo gif -->
+
+https://github.com/user-attachments/assets/967644ea-743f-4bd0-997c-3972efc775ff
+
 
 ## Features
 
