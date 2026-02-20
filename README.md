@@ -4,9 +4,11 @@ For when your statusline is too far away and you still can't tell what mode you'
 
 modejunkie colors **four UI elements simultaneously** based on your current vim mode — cursorline, line numbers, a floating widget near your cursor, and your statusline. No more accidentally typing `iiiiii` into your buffer because you forgot you were in normal mode.
 
-
 https://github.com/user-attachments/assets/967644ea-743f-4bd0-997c-3972efc775ff
 
+## Why?
+
+Vim modes are invisible by default. A single character in the statusline, 50 lines away from where you're looking. modejunkie makes the current mode impossible to ignore: your cursorline, your line numbers, your floating indicator, and your statusline all shift color the instant you change modes. It's mode awareness for people who don't want to think about it.
 
 ## Features
 
@@ -17,7 +19,7 @@ https://github.com/user-attachments/assets/967644ea-743f-4bd0-997c-3972efc775ff
 
 All four update instantly on every mode change, including operator-pending sub-modes (`d`, `y`, `c`).
 
-## Defaults (so you actually see it)
+## Defaults 
 
 modejunkie enables the minimum editor options needed for the visuals to be visible in normal buffers:
 
@@ -27,24 +29,7 @@ modejunkie enables the minimum editor options needed for the visuals to be visib
 
 You can disable this behavior with `defaults = false` (see Configuration).
 
-## Supported modes
 
-| Mode | Label | Color |
-|---|---|---|
-| Normal | `NORMAL` | `#7aa2f7` blue |
-| Insert | `INSERT` | `#ff9e64` orange |
-| Visual | `VISUAL` | `#bb9af7` purple |
-| V-Line | `V-LINE` | `#bb9af7` purple |
-| V-Block | `V-BLOCK` | `#bb9af7` purple |
-| Select | `SELECT` | `#9d7cd8` purple |
-| S-Line | `S-LINE` | `#9d7cd8` purple |
-| S-Block | `S-BLOCK` | `#9d7cd8` purple |
-| Replace | `REPLACE` | `#f7768e` red |
-| Command | `COMMAND` | `#e0af68` yellow |
-| Terminal | `TERMINAL` | `#7dcfff` cyan |
-| Op-pending (delete) | `OP-PEND` | `#f7768e` red |
-| Op-pending (yank) | `OP-PEND` | `#ff9e64` orange |
-| Op-pending (change) | `OP-PEND` | `#7aa2f7` blue |
 
 Each mode has three color variants used across the UI:
 - **vivid** — bright foreground (line numbers, labels)
@@ -162,12 +147,21 @@ All mode colors are defined in [`lua/modejunkie/colors.lua`](lua/modejunkie/colo
 }
 ```
 
-## Dev / Docker
+## Supported modes
 
-This repo includes a throwaway Docker test harness at `test-env/` that boots a fresh LazyVim and loads modejunkie from the local directory.
-
-If you're hacking on the plugin, it's a convenient way to verify "fresh install" behavior without touching your real config.
-
-## Why?
-
-Vim modes are invisible by default. A single character in the statusline, 50 lines away from where you're looking. modejunkie makes the current mode impossible to ignore: your cursorline, your line numbers, your floating indicator, and your statusline all shift color the instant you change modes. It's mode awareness for people who don't want to think about it.
+| Mode | Label | Color |
+|---|---|---|
+| Normal | `NORMAL` | `#7aa2f7` blue |
+| Insert | `INSERT` | `#ff9e64` orange |
+| Visual | `VISUAL` | `#bb9af7` purple |
+| V-Line | `V-LINE` | `#bb9af7` purple |
+| V-Block | `V-BLOCK` | `#bb9af7` purple |
+| Select | `SELECT` | `#9d7cd8` purple |
+| S-Line | `S-LINE` | `#9d7cd8` purple |
+| S-Block | `S-BLOCK` | `#9d7cd8` purple |
+| Replace | `REPLACE` | `#f7768e` red |
+| Command | `COMMAND` | `#e0af68` yellow |
+| Terminal | `TERMINAL` | `#7dcfff` cyan |
+| Op-pending (delete) | `OP-PEND` | `#f7768e` red |
+| Op-pending (yank) | `OP-PEND` | `#ff9e64` orange |
+| Op-pending (change) | `OP-PEND` | `#7aa2f7` blue |
