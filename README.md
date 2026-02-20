@@ -57,13 +57,39 @@ Each mode has three color variants used across the UI:
 
 ## Installation
 
-Using [lazy.nvim](https://github.com/folke/lazy.nvim):
+### LazyVim
+
+Create `lua/plugins/modejunkie.lua`:
+
+```lua
+return {
+  {
+    "blur6666/modejunkie.nvim",
+    dependencies = { "rasulomaroff/reactive.nvim" },
+    opts = {
+      -- see Configuration
+    },
+    config = function(_, opts)
+      require("modejunkie").setup(opts)
+    end,
+  },
+  -- Optional: lualine integration
+  {
+    "nvim-lualine/lualine.nvim",
+    opts = function(_, opts)
+      return require("modejunkie.lualine").apply(opts)
+    end,
+  },
+}
+```
+
+### lazy.nvim (non-LazyVim)
+
+Add to your `require("lazy").setup({ ... })` spec:
 
 ```lua
 {
   "blur6666/modejunkie.nvim",
-  lazy = false,
-  priority = 900,
   dependencies = { "rasulomaroff/reactive.nvim" },
   config = function()
     require("modejunkie").setup()
