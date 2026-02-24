@@ -9,25 +9,21 @@ M.config = {
   -- If the current value doesn't include "line" (e.g. "number"), modejunkie
   -- will switch it to this value so the horizontal line tint is visible.
   cursorlineopt = "both",
-
-  disabled_filetypes = {
-    "alpha", "dashboard", "lazy", "mason", "TelescopePrompt",
-    "NvimTree", "neo-tree", "Trouble", "noice", "notify",
-    "toggleterm", "help",
-  },
-  disabled_buftypes = { "terminal", "prompt", "quickfix", "nofile" },
 }
 
-local function is_disabled(buf)
-  local ft = vim.bo[buf].filetype
-  local bt = vim.bo[buf].buftype
-  for _, v in ipairs(M.config.disabled_buftypes) do
-    if bt == v then return true end
-  end
-  for _, v in ipairs(M.config.disabled_filetypes) do
-    if ft == v then return true end
-  end
-  return false
+-- Returns true when we should apply number/cursorline settings to this buffer.
+-- We use a property-based allowlist instead of a filetype/buftype denylist:
+--   buftype == ""  → real file buffer (not quickfix, terminal, plugin panels, etc.)
+--   buflisted      → buffer is user-visible (not scratch/hidden UI buffers)
+-- Floating windows are also excluded.
+local function is_real_buffer(win, buf)
+  if not (win and vim.api.nvim_win_is_valid(win)) then return false end
+  if not (buf and vim.api.nvim_buf_is_valid(buf)) then return false end
+  if vim.bo[buf].buftype ~= "" then return false end
+  if not vim.bo[buf].buflisted then return false end
+  local cfg = vim.api.nvim_win_get_config(win)
+  if cfg.relative and cfg.relative ~= "" then return false end
+  return true
 end
 
 local function ensure_cursorlineopt()
@@ -40,9 +36,7 @@ local function ensure_cursorlineopt()
 end
 
 local function apply(win, buf)
-  if not (win and vim.api.nvim_win_is_valid(win)) then return end
-  if not (buf and vim.api.nvim_buf_is_valid(buf)) then return end
-  if is_disabled(buf) then return end
+  if not is_real_buffer(win, buf) then return end
 
   if M.config.number ~= nil then
     vim.wo[win].number = M.config.number
