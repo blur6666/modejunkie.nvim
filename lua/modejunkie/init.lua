@@ -12,8 +12,8 @@ function M.setup(opts)
   require("modejunkie.options").setup(opts.defaults)
 
   -- 3. Floating tip/window showing mode + filename (near cursor)
-  -- Options: floating_tip = false to disable, or pass config via cursor_status
-  local enable_floating = opts.floating_tip ~= false and opts.floating_window ~= false
+  -- Default: disabled. Set floating_tip = true to enable.
+  local enable_floating = opts.floating_tip == true or opts.floating_window == true
   if enable_floating then
     require("modejunkie.cursor_status").setup(opts.cursor_status)
   else

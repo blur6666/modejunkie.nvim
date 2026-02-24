@@ -102,9 +102,9 @@ require("modejunkie").setup({
     cursorline = true,      -- required for cursorline tint to be visible
     cursorlineopt = "both", -- fixes configs like `cursorlineopt=number`
   },
-  -- Floating tip near cursor showing mode + filename. Default: true (enabled).
-  -- Set to false to disable: floating_tip = false
-  floating_tip = true,  -- also accepts: floating_window
+  -- Floating tip near cursor showing mode + filename. Default: false (disabled).
+  -- Set to true to enable: floating_tip = true
+  floating_tip = false,  -- also accepts: floating_window
   cursor_status = {
     disabled_filetypes = {
       "alpha", "dashboard", "lazy", "mason", "TelescopePrompt",
