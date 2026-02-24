@@ -1,6 +1,20 @@
 local M = {}
 local colors = require("modejunkie.colors")
 
+-- Returns true when the current window should NOT receive mode-coloring.
+-- We only want cursorline/linenr colors in real editor buffers:
+--   buftype == ""  → normal file buffer (not a plugin panel/quickfix/etc.)
+--   buflisted      → buffer is user-visible (not scratch/hidden UI buffers)
+-- Floating windows are also excluded even when focusable.
+local function skip_non_editor()
+  local buf = vim.api.nvim_get_current_buf()
+  if vim.bo[buf].buftype ~= "" then return true end
+  if not vim.bo[buf].buflisted then return true end
+  local cfg = vim.api.nvim_win_get_config(0)
+  if cfg.relative and cfg.relative ~= "" then return true end
+  return false
+end
+
 function M.setup()
   local ok, reactive = pcall(require, "reactive")
   if not ok then return end
@@ -8,6 +22,7 @@ function M.setup()
   -- Vivid cursorline highlight per mode.
   reactive.add_preset({
     name = "cursorline",
+    skip = skip_non_editor,
     init = function()
       vim.opt.cursorline = true
       -- LazyVim (and some UI configs) often set `cursorlineopt=number`, which
@@ -76,6 +91,7 @@ function M.setup()
   -- winhighlight inconsistencies with LineNr during visual mode transitions.
   reactive.add_preset({
     name = "linenr",
+    skip = skip_non_editor,
     static = {
       winhl = {
         inactive = { LineNr = { fg = "#606880" } }, -- neutral for inactive windows
