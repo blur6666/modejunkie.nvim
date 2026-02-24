@@ -29,6 +29,12 @@ local MODE_MAP = {
 
 local state = { buf = nil, win = nil, enabled = true, last_modified = false, last_width = 0 }
 
+local function tbl_set(list)
+  local s = {}
+  for _, v in ipairs(list) do s[v] = true end
+  return s
+end
+
 function M.define_highlights()
   local hls = {
     CursorStatusNormal   = { fg = colors.normal.muted,   bg = "none" },
@@ -50,10 +56,7 @@ function M.define_highlights()
 end
 
 local function is_disabled()
-  local ft, bt = vim.bo.filetype, vim.bo.buftype
-  for _, v in ipairs(M.config.disabled_buftypes)  do if bt == v then return true end end
-  for _, v in ipairs(M.config.disabled_filetypes) do if ft == v then return true end end
-  return false
+  return M._disabled_ft[vim.bo.filetype] or M._disabled_bt[vim.bo.buftype]
 end
 
 local function build_content()
@@ -94,6 +97,8 @@ local function ensure_buf()
   state.buf = buf; return buf
 end
 
+local NS = vim.api.nvim_create_namespace("modejunkie")
+
 local function hide_win()
   if state.win and vim.api.nvim_win_is_valid(state.win) then
     vim.api.nvim_win_close(state.win, true); state.win = nil
@@ -132,10 +137,10 @@ local function open_or_update(content, pos)
   vim.bo[buf].modifiable = true
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, { content.line })
   vim.bo[buf].modifiable = false
-  vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
-  vim.api.nvim_buf_add_highlight(buf, 0, content.mode_hl,         0, content.mode_s, content.mode_e)
-  vim.api.nvim_buf_add_highlight(buf, 0, "CursorStatusFile",      0, content.file_s, content.file_e)
-  vim.api.nvim_buf_add_highlight(buf, 0, "CursorStatusModified",  0, content.mod_s,  content.mod_e)
+  vim.api.nvim_buf_clear_namespace(buf, NS, 0, -1)
+  vim.api.nvim_buf_add_highlight(buf, NS, content.mode_hl,         0, content.mode_s, content.mode_e)
+  vim.api.nvim_buf_add_highlight(buf, NS, "CursorStatusFile",      0, content.file_s, content.file_e)
+  vim.api.nvim_buf_add_highlight(buf, NS, "CursorStatusModified",  0, content.mod_s,  content.mod_e)
 end
 
 function M.update()
@@ -159,6 +164,8 @@ end
 
 function M.setup(user_config)
   if user_config then M.config = vim.tbl_deep_extend("force", M.config, user_config) end
+  M._disabled_ft = tbl_set(M.config.disabled_filetypes)
+  M._disabled_bt = tbl_set(M.config.disabled_buftypes)
   M.define_highlights()
   local g = vim.api.nvim_create_augroup("CursorStatus", { clear = true })
   vim.api.nvim_create_autocmd("ModeChanged",               { group=g, pattern="*", callback=M.update })
