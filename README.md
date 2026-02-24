@@ -102,6 +102,9 @@ require("modejunkie").setup({
     cursorline = true,      -- required for cursorline tint to be visible
     cursorlineopt = "both", -- fixes configs like `cursorlineopt=number`
   },
+  -- Floating tip near cursor showing mode + filename. Default: true (enabled).
+  -- Set to false to disable: floating_tip = false
+  floating_tip = true,  -- also accepts: floating_window
   cursor_status = {
     disabled_filetypes = {
       "alpha", "dashboard", "lazy", "mason", "TelescopePrompt",
@@ -119,6 +122,14 @@ To disable all option-tweaking (modejunkie will still apply highlights and the f
 
 ```lua
 require("modejunkie").setup({ defaults = false })
+```
+
+To disable the floating tip (the small widget near your cursor):
+
+```lua
+require("modejunkie").setup({ floating_tip = false })
+-- or use the alias:
+require("modejunkie").setup({ floating_window = false })
 ```
 
 All options are optional. The defaults above are used when nothing is passed.

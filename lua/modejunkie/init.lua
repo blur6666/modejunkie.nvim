@@ -11,8 +11,14 @@ function M.setup(opts)
   -- `cursorlineopt` if it's set to only highlight the number.
   require("modejunkie.options").setup(opts.defaults)
 
-  -- 3. Setup floating mode widget
-  require("modejunkie.cursor_status").setup(opts.cursor_status)
+  -- 3. Floating tip/window showing mode + filename (near cursor)
+  -- Options: floating_tip = false to disable, or pass config via cursor_status
+  local enable_floating = opts.floating_tip ~= false and opts.floating_window ~= false
+  if enable_floating then
+    require("modejunkie.cursor_status").setup(opts.cursor_status)
+  else
+    require("modejunkie.cursor_status").setup(false)
+  end
 
   -- 4. Register reactive presets (cursorline + linenr) if reactive.nvim is loaded
   require("modejunkie.reactive").setup()

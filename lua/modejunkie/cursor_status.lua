@@ -163,11 +163,20 @@ function M.toggle()
 end
 
 function M.setup(user_config)
+  -- Clear existing augroup first so re-setup properly cleans up old autocmds
+  local g = vim.api.nvim_create_augroup("CursorStatus", { clear = true })
+
+  -- Allow disabling entirely: `floating_tip = false`
+  if user_config == false then
+    state.enabled = false
+    hide_win()
+    return
+  end
+
   if user_config then M.config = vim.tbl_deep_extend("force", M.config, user_config) end
   M._disabled_ft = tbl_set(M.config.disabled_filetypes)
   M._disabled_bt = tbl_set(M.config.disabled_buftypes)
   M.define_highlights()
-  local g = vim.api.nvim_create_augroup("CursorStatus", { clear = true })
   vim.api.nvim_create_autocmd("ModeChanged",               { group=g, pattern="*", callback=M.update })
   vim.api.nvim_create_autocmd({"BufEnter","BufWritePost"}, { group=g, pattern="*", callback=M.update })
   vim.api.nvim_create_autocmd({"WinEnter"},                { group=g, pattern="*", callback=M.update })
