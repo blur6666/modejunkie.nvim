@@ -97,7 +97,7 @@ function M.apply(raw_mode)
   -- Force Neovim to re-send terminal cursor color (OSC 12)
   -- after we mutate the highlight used by 'guicursor'.
   if M.config.force_guicursor then
-    pcall(vim.api.nvim_set_option_value, "guicursor", vim.o.guicursor, {})
+    pcall(vim.api.nvim_set_option_value, "guicursor", vim.o.guicursor, { scope = "global" })
   end
 end
 

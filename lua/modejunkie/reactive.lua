@@ -17,7 +17,10 @@ end
 
 function M.setup()
   local ok, reactive = pcall(require, "reactive")
-  if not ok then return end
+  if not ok then
+    vim.notify("[modejunkie] reactive.nvim not found - cursorline/linenr disabled", vim.log.levels.WARN, { title = "modejunkie" })
+    return
+  end
 
   -- Vivid cursorline highlight per mode.
   reactive.add_preset({
