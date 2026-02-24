@@ -56,15 +56,13 @@ return {
     opts = {
       -- see Configuration
     },
-    config = function(_, opts)
-      require("modejunkie").setup(opts)
-    end,
   },
-  -- Optional: lualine integration
+  -- Optional: lualine integration (only applies if lualine is already loaded)
   {
     "nvim-lualine/lualine.nvim",
+    optional = true,
     opts = function(_, opts)
-      return require("modejunkie.lualine").apply(opts)
+      require("modejunkie.lualine").apply(opts)
     end,
   },
 }
@@ -78,22 +76,21 @@ Add to your `require("lazy").setup({ ... })` spec:
 {
   "blur6666/modejunkie.nvim",
   dependencies = { "rasulomaroff/reactive.nvim" },
-  config = function()
-    require("modejunkie").setup()
-  end,
+  opts = {},
 },
--- Optional: lualine integration
+-- Optional: lualine integration (only applies if lualine is already loaded)
 {
   "nvim-lualine/lualine.nvim",
+  optional = true,
   opts = function(_, opts)
-    return require("modejunkie.lualine").apply(opts)
+    require("modejunkie.lualine").apply(opts)
   end,
 },
 ```
 
 ## Configuration
 
-Pass options to `setup()` to configure the floating indicator:
+Pass options via `opts` in your plugin spec (or directly to `setup()` if not using lazy.nvim):
 
 ```lua
 require("modejunkie").setup({
